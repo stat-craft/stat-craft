@@ -3,7 +3,19 @@ name: CI
 on: [push]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Run linters
+      run: |
+        flake8 .
+        black --check .
+        isort --check .
+        bandit -r
+
   test:
+    needs: lint
     runs-on: ubuntu-latest
 
     steps:
@@ -24,9 +36,4 @@ jobs:
       run: |
         python -m unittest discover -s tests
 
-    - name: Run linters
-      run: |
-        flake8 .
-        black --check .
-        isort --check .
-        bandit -r
+    

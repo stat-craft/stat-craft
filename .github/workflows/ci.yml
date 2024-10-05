@@ -9,7 +9,7 @@ jobs:
     steps:
     - name: Run linters
       run: |
-        flake8 .
+        flake8 --check .
         black --check .
         isort --check .
         bandit -r

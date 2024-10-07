@@ -1,5 +1,6 @@
 from django.http import HttpResponse
+import os
 
 
 def index(request):
-    return HttpResponse("Maciej gej.")
+    return HttpResponse(os.getenv("APP_NAME") + " gej.")

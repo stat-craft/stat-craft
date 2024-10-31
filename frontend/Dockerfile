@@ -10,6 +10,7 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+RUN adduser --disabled-password statcraft && chown -R statcraft /app
+USER statcraft
 
-CMD ["npm", "run", "dev"]
+EXPOSE 3000

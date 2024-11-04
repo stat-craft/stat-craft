@@ -36,6 +36,7 @@ services:
   frontend:
     build:
       context: ./frontend
+      target: prod
     command: npm run start
     ports:
       - 3000:3000

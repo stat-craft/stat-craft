@@ -1,14 +1,31 @@
-#!/bin/sh
+#!/bin/bash
 
-if [ "$DATABASE" = "postgres" ]
-then
-    echo "Waiting for postgres..."
+# Exit immediately if a command exits with a non-zero status
+set -e
 
-    while ! nc -z $SQL_HOST $SQL_PORT; do
-      sleep 0.1
+# Function to check database connectivity
+check_postgres_connection() {
+    echo "Checking PostgreSQL connection..."
+
+    while ! nc -z db 5432; do
+        echo "PostgreSQL is unavailable - sleeping"
+        sleep 2
     done
 
-    echo "PostgreSQL started"
-fi
+    echo "PostgreSQL is up and running!"
+}
 
-exec "$@"
+# Call the database check function
+check_postgres_connection
+
+# Collect static files without user input
+echo "Collecting static files..."
+python manage.py collectstatic --noinput
+
+# Apply database migrations
+echo "Applying database migrations..."
+python manage.py migrate --noinput
+
+# Start the Gunicorn server
+echo "Starting Gunicorn server..."
+gunicorn statCraft.wsgi:application --bind 0.0.0.0:8000 --workers 5

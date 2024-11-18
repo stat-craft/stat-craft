@@ -6,7 +6,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=${DB_USER} 
+      - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
     expose:
@@ -18,21 +18,23 @@ services:
       retries: 5
     networks:
       - statcraft
-        
+
   adminer:
-      image: adminer
-      restart: always
-      ports:
-        - 8080:8080
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - statcraft
 
   backend:
     build:
       context: ./backend
-    command: gunicorn statCraft.wsgi:application --bind 0.0.0.0:8000
     ports:
       - 8000:8000
     volumes:
       - ./backend/:/app
+      - static_data:/app/statCraft/static
     env_file:
       - ./.env
     depends_on:
@@ -54,11 +56,12 @@ services:
       - ./.env
     networks:
       - statcraft
-    
+
   nginx:
     image: nginx:latest
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - static_data:/app/statCraft/static
     ports:
       - 80:80
     depends_on:
@@ -70,5 +73,7 @@ services:
 networks:
   statcraft:
 
+
 volumes:
   db-data:
+  static_data:

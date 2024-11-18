@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-ARG PYTHON_VERSION=3.10.6
+ARG PYTHON_VERSION=3.11
 FROM python:${PYTHON_VERSION}-slim as base
 
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -7,6 +7,8 @@ ENV PYTHONUNBUFFERED=1
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip
 
@@ -20,3 +22,7 @@ RUN adduser --disabled-password statcraft && chown -R statcraft /app
 USER statcraft
 
 EXPOSE 8000
+
+RUN chmod +x /app/entrypoint.prod.sh
+
+ENTRYPOINT ["/app/entrypoint.prod.sh"]

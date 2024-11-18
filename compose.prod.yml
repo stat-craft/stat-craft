@@ -22,11 +22,10 @@ services:
   backend:
     build:
       context: ./backend
-    command: gunicorn statCraft.wsgi:application --bind 0.0.0.0:8000
     ports:
       - 8000:8000
     volumes:
-      - ./backend/:/app
+      - static_data:/app/statCraft/static
     env_file:
       - ./.env
     depends_on:
@@ -42,20 +41,20 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./frontend/:/app
       - /app/node_modules
       - /app/.next
     env_file:
       - ./.env
     networks:
       - statcraft
-    
+
   nginx:
     image: nginx:latest
     volumes:
       - ./nginx/prod.conf:/etc/nginx/conf.d/prod.conf
       - /etc/letsencrypt/live:/etc/letsencrypt/live
       - /etc/letsencrypt/archive:/etc/letsencrypt/archive
+      - static_data:/app/statCraft/static
     ports:
       - 80:80
       - 443:443
@@ -68,5 +67,7 @@ services:
 networks:
   statcraft:
 
+
 volumes:
   db-data:
+  static_data:

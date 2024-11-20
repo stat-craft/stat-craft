@@ -23,4 +23,5 @@ urlpatterns = [
     path("api/", views.Index.as_view()),
     path("api/admin/", admin.site.urls),
     path("api/api-auth/", include("rest_framework.urls")),
+    path("api/users/", include("users.urls")),
 ]

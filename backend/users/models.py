@@ -37,8 +37,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(default=timezone.now)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    objects = UserManager()                             #User.objects.create_user(email="test@example.com", password="password123")
-
+    objects = (
+        UserManager()
+    )  # User.objects.create_user(email="test@example.com", password="password123")
 
     USERNAME_FIELD = "email"
 

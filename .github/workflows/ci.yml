@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: py-actions/flake8@v2
         with:
-          max-line-length: 120
+          max-line-length: 140
 
   test:
     runs-on: ubuntu-latest

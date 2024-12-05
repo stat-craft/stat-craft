@@ -25,7 +25,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - static_data:/app/statCraft/static
+      - static_data:/app/static
     env_file:
       - ./.env
     depends_on:
@@ -54,7 +54,7 @@ services:
       - ./nginx/prod.conf:/etc/nginx/conf.d/prod.conf
       - /etc/letsencrypt/live:/etc/letsencrypt/live
       - /etc/letsencrypt/archive:/etc/letsencrypt/archive
-      - static_data:/app/statCraft/static
+      - static_data:/app/static
     ports:
       - 80:80
       - 443:443

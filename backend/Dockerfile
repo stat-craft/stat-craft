@@ -19,6 +19,9 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 COPY . .
 
 RUN adduser --disabled-password statcraft && chown -R statcraft /app
+RUN mkdir -p /app/static && chown -R statcraft:statcraft /app/static
+RUN mkdir -p /app/media && chown -R statcraft:statcraft /app/media
+
 USER statcraft
 
 EXPOSE 8000

@@ -21,6 +21,7 @@ COPY . .
 RUN adduser --disabled-password statcraft && chown -R statcraft /app
 RUN mkdir -p /app/static && chown -R statcraft:statcraft /app/static
 RUN mkdir -p /app/media && chown -R statcraft:statcraft /app/media
+RUN chmod -R 775 /app/static
 
 USER statcraft
 

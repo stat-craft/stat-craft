@@ -37,12 +37,8 @@ services:
     build:
       context: ./frontend
       target: prod
-    command: npm run start
-    ports:
-      - 3000:3000
     volumes:
-      - /app/node_modules
-      - /app/.next
+      - frontend-build:/usr/share/nginx/html
     env_file:
       - ./.env
     networks:
@@ -55,6 +51,7 @@ services:
       - /etc/letsencrypt/live:/etc/letsencrypt/live
       - /etc/letsencrypt/archive:/etc/letsencrypt/archive
       - static_data:/app/static
+      - frontend-build:/usr/share/nginx/html
     ports:
       - 80:80
       - 443:443
@@ -67,7 +64,7 @@ services:
 networks:
   statcraft:
 
-
 volumes:
   db-data:
   static_data:
+  frontend-build:

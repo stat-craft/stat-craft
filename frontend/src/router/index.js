@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import SignInView from '@/views/SignInView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 import AboutView from '@/views/AboutView.vue'
+import CharacterBuilderView from '@/views/CharacterBuilderView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,12 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: AboutView,
+      meta: { requiresAuth: false },
+    },
+    {
+      path: '/craft',
+      name: 'craft',
+      component: CharacterBuilderView,
       meta: { requiresAuth: true },
     },
     // {

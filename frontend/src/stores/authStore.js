@@ -11,9 +11,9 @@ export const useAuthStore = defineStore('auth', {
     isAuthenticated: (state) => !!state.accessToken,
   },
   actions: {
-    async login(username, password) {
+    async login(email, password) {
       try {
-        const response = await axios.post('/token/', { username, password })
+        const response = await axios.post('/users/token/', { email, password })
         this.accessToken = response.data.access
         this.refreshToken = response.data.refresh
 
@@ -22,12 +22,13 @@ export const useAuthStore = defineStore('auth', {
         localStorage.setItem('refreshToken', this.refreshToken)
 
         // Fetch user info or set it manually
-        await this.fetchUser()
+        // await this.fetchUser()
       } catch (error) {
         console.error('Login failed:', error)
         throw error
       }
     },
+
     async fetchUser() {
       try {
         const response = await axios.get('/user/')
@@ -36,17 +37,19 @@ export const useAuthStore = defineStore('auth', {
         console.error('Failed to fetch user:', error)
       }
     },
+
     logout() {
       this.accessToken = null
       this.refreshToken = null
-      this.user = null
+      // this.user = null
 
       localStorage.removeItem('accessToken')
       localStorage.removeItem('refreshToken')
     },
+
     async refreshAccessToken() {
       try {
-        const response = await axios.post('/token/refresh/', {
+        const response = await axios.post('/users/token/refresh/', {
           refresh: this.refreshToken,
         })
         this.accessToken = response.data.access

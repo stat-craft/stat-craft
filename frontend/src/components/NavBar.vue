@@ -1,18 +1,31 @@
 <script>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
+import { storeToRefs } from 'pinia'
 
 export default {
   name: 'NavBar',
   setup() {
     const isMenuOpen = ref(false)
+    const router = useRouter()
+    const authStore = useAuthStore()
+    const { isAuthenticated } = storeToRefs(authStore)
 
     const toggleMenu = () => {
       isMenuOpen.value = !isMenuOpen.value
     }
 
+    const signOut = () => {
+      authStore.logout()
+      router.push('/signin')
+    }
+
     return {
       isMenuOpen,
       toggleMenu,
+      isAuthenticated,
+      logout: signOut,
     }
   },
 }
@@ -38,14 +51,23 @@ export default {
 
       <!-- Sign In / Sign Out Buttons -->
       <div class="hidden md:flex space-x-4">
-        <router-link to="/signin">
+        <router-link v-if="!isAuthenticated" to="/signin">
           <button class="px-4 py-2 bg-green-400 text-gray-900 rounded-md hover:bg-green-300">
             Sign In
           </button>
         </router-link>
-        <router-link to="/signup">
+        <router-link v-if="!isAuthenticated" to="/signup">
           <button class="px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600">Sign Up</button>
         </router-link>
+        <router-link v-if="isAuthenticated" to="/craft">
+        <button class="px-4 py-2 bg-green-400 text-gray-900 rounded-md hover:bg-green-300">
+          Craft Character
+        </button>
+      </router-link>
+
+        <button v-if="isAuthenticated" @click="logout" class="px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600">
+          Sign Out
+        </button>
       </div>
 
       <!-- Hamburger menu for smaller screens -->
@@ -72,10 +94,17 @@ export default {
       <a href="#" class="block py-2 px-4 hover:bg-gray-700 hover:text-green-400"> Features </a>
       <a href="#" class="block py-2 px-4 hover:bg-gray-700 hover:text-green-400"> Contact </a>
       <div class="flex flex-col space-y-2 px-4 mt-2">
-        <button class="w-full px-4 py-2 bg-green-400 text-gray-900 rounded-md hover:bg-green-300">
-          Sign In
-        </button>
-        <button class="w-full px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600">Sign Out</button>
+        <router-link v-if="!isAuthenticated" to="/signin">
+          <button class="w-full px-4 py-2 bg-green-400 text-gray-900 rounded-md hover:bg-green-300">
+            Sign In
+          </button>
+        </router-link>
+        <router-link v-if="!isAuthenticated" to="/signup">
+          <button class="w-full px-4 py-2 bg-green-400 text-gray-900 rounded-md hover:bg-green-300">
+            Sign Up
+          </button>
+        </router-link>
+        <button v-if="isAuthenticated" @click="logout" class="w-full px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600">Sign Out</button>
       </div>
     </div>
   </nav>

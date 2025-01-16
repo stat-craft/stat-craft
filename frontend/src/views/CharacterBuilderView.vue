@@ -1,10 +1,13 @@
 <script setup>
+
 </script>
 
 <template>
   <main>
     <section class="relative w-full h-screen">
-      <div>About Page</div>
+      <div>
+        <h1>Character Builder</h1>
+      </div>
     </section>
   </main>
 </template>
